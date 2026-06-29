@@ -70,8 +70,8 @@ export default function IndexPage() {
       <View className={styles.logo}>
         <Text className={styles.logoText}>🍜</Text>
       </View>
-      <Text className={styles.title}>美食点餐</Text>
-      <Text className={styles.subtitle}>便捷点餐，享受美食</Text>
+      <Text className={styles.title}>小爱专属服务</Text>
+      <Text className={styles.subtitle}>贴心服务，只为小爱</Text>
 
       <View className={styles.loginBox}>
         <Text className={styles.loginTitle}>账号登录</Text>

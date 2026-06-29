@@ -12,7 +12,7 @@ export default defineAppConfig({
   window: {
     backgroundTextStyle: 'light',
     navigationBarBackgroundColor: '#FF6B35',
-    navigationBarTitleText: '点餐小程序',
+    navigationBarTitleText: '小爱专属服务',
     navigationBarTextStyle: 'white'
   },
   tabBar: {
@@ -22,7 +22,7 @@ export default defineAppConfig({
     list: [
       {
         pagePath: 'pages/customer/home/index',
-        text: '点餐'
+        text: '菜单'
       },
       {
         pagePath: 'pages/customer/order/index',
@@ -33,6 +33,5 @@ export default defineAppConfig({
         text: '我的'
       }
     ]
-  },
-  themeLocation: '@/styles/theme.scss'
+  }
 })

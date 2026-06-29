@@ -53,7 +53,6 @@ export default function CartPage() {
         if (res.confirm) {
           Taro.showLoading({ title: '提交中...' });
           await addOrder(cart, remark.trim() || undefined);
-          clearCart();
           setRemark('');
           Taro.hideLoading();
           Taro.showToast({ title: '下单成功', icon: 'success' });
@@ -80,7 +79,7 @@ export default function CartPage() {
             <Text className={styles.emptyIcon}>🛒</Text>
             <Text className={styles.emptyText}>购物车是空的</Text>
             <Button className={styles.shopBtn} onClick={handleGoShopping}>
-              去点餐
+              去下单
             </Button>
           </View>
         </View>

@@ -1,7 +1,7 @@
 {
   "miniprogramRoot": "./",
-  "projectname": "taro_template",
-  "description": "taro_template",
+  "projectname": "小爱专属服务",
+  "description": "小爱专属服务",
   "appid": "touristappid",
   "setting": {
     "urlCheck": true,

@@ -1,9 +1,12 @@
-import React, { createContext, useContext, useState, useCallback, ReactNode, useEffect, useRef } from 'react';
+// 全局状态管理 - Supabase 云端 + 实时同步
+// 女朋友下单 → 你手机立刻弹出通知
+import React, { createContext, useContext, useState, useCallback, ReactNode, useEffect } from 'react';
 import { Category, Dish, CartItem, Order, UserRole, OrderStatus } from '@/types';
-import { categories } from '@/data/mock';
+import { categories, defaultDishes } from '@/data/mock';
 import {
-  fetchDishes, fetchOrders, createOrderApi, updateOrderApi,
-  addDishApi, updateDishApi, deleteDishApi, createSocket
+  fetchDishes, fetchOrders, createOrderDb, updateOrderDb,
+  addDishDb, updateDishDb, deleteDishDb,
+  subscribeOrders, subscribeDishes
 } from '@/services/api';
 
 interface AppContextType {
@@ -38,31 +41,64 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
-  const wsRef = useRef<WebSocket | null>(null);
 
-  // 初始化：加载数据 + WebSocket实时推送
+  // 初始化：从 Supabase 加载数据 + 订阅实时变化
   useEffect(() => {
-    (async () => {
-      const [d, o] = await Promise.all([fetchDishes(), fetchOrders()]);
-      setDishes(d);
-      setOrders(o.sort((a: Order, b: Order) => b.createTime - a.createTime));
-      setLoading(false);
-    })();
+    let unsubscribeOrders: (() => void) | null = null;
+    let unsubscribeDishes: (() => void) | null = null;
+    let cancelled = false;
 
-    wsRef.current = createSocket((msg) => {
-      switch (msg.type) {
-        case 'newOrder': setOrders(prev => [msg.order, ...prev]); break;
-        case 'orderUpdated': setOrders(prev => prev.map(o => o.id === msg.order.id ? msg.order : o)); break;
-        case 'dishAdded': setDishes(prev => [...prev, msg.dish]); break;
-        case 'dishUpdated': setDishes(prev => prev.map(d => d.id === msg.dish.id ? msg.dish : d)); break;
-        case 'dishDeleted': setDishes(prev => prev.filter(d => d.id !== msg.id)); break;
+    const init = async () => {
+      let online = false;
+      try {
+        // 并行加载菜品和订单（5秒超时）
+        const [d, o] = await Promise.all([fetchDishes(), fetchOrders()]);
+        if (!cancelled) {
+          setDishes(d);
+          setOrders(o);
+          online = true;
+        }
+      } catch (err) {
+        console.warn('Supabase 未连接，使用本地数据');
+        if (!cancelled) {
+          setDishes(defaultDishes);
+          setOrders([]);
+        }
       }
-    });
+      if (!cancelled) {
+        setLoading(false);
+      }
 
-    return () => wsRef.current?.close();
+      // 只在 Supabase 可用时才启动订阅
+      if (online && !cancelled) {
+        try {
+          unsubscribeOrders = subscribeOrders(
+            (newOrder: Order) => setOrders(prev => [newOrder, ...prev]),
+            (updatedOrder: Order) => setOrders(prev =>
+              prev.map(o => o.id === updatedOrder.id ? updatedOrder : o)
+            )
+          );
+          unsubscribeDishes = subscribeDishes(
+            (newDish: Dish) => setDishes(prev => [...prev, newDish]),
+            (updatedDish: Dish) => setDishes(prev =>
+              prev.map(d => d.id === updatedDish.id ? updatedDish : d)
+            ),
+            (deletedId: number) => setDishes(prev => prev.filter(d => d.id !== deletedId))
+          );
+        } catch (_) {}
+      }
+    };
+
+    init();
+
+    return () => {
+      cancelled = true;
+      unsubscribeOrders?.();
+      unsubscribeDishes?.();
+    };
   }, []);
 
-  // 购物车（仅本地）
+  // ====== 购物车（仅内存，不持久化） ======
   const addToCart = useCallback((dish: Dish) => {
     setCart(prev => {
       const existing = prev.find(item => item.dish.id === dish.id);
@@ -79,47 +115,63 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const clearCart = useCallback(() => setCart([]), []);
   const getCartTotal = useCallback(() => cart.reduce((sum, item) => sum + item.dish.price * item.quantity, 0), [cart]);
 
-  // 订单
+  // ====== 订单管理 ======
   const addOrder = useCallback(async (items: CartItem[], remark?: string) => {
-    const orderData = {
-      items: items.map(item => ({ id: item.dish.id, dishId: item.dish.id, dishName: item.dish.name, price: item.dish.price, quantity: item.quantity })),
-      totalPrice: items.reduce((sum, item) => sum + item.dish.price * item.quantity, 0),
-      remark
+    const totalPrice = items.reduce((sum, item) => sum + item.dish.price * item.quantity, 0);
+    const newOrder: Order = {
+      id: Date.now(),
+      orderNo: 'OD' + Date.now(),
+      items: items.map(item => ({ dishId: item.dish.id, dishName: item.dish.name, price: item.dish.price, quantity: item.quantity })),
+      totalPrice,
+      status: 'pending' as OrderStatus,
+      createTime: Date.now(),
+      remark: remark || ''
     };
-    const order = await createOrderApi(orderData);
-    setOrders(prev => [order, ...prev]);
-  }, []);
+    // 立即更新本地状态（商家端立刻看到）
+    setOrders(prev => [newOrder, ...prev]);
+    clearCart();
+    // 后台同步到 Supabase
+    try {
+      await createOrderDb({
+        order_no: newOrder.orderNo,
+        items: newOrder.items,
+        total_price: totalPrice,
+        status: 'pending',
+        create_time: newOrder.createTime,
+        remark: remark || undefined
+      });
+    } catch (_) {}
+  }, [clearCart]);
 
   const updateOrderStatus = useCallback(async (orderId: number, status: OrderStatus) => {
-    await updateOrderApi(orderId, { status });
-    setOrders(prev => prev.map(order => (order.id === orderId ? { ...order, status } : order)));
+    // 立即更新本地状态
+    setOrders(prev => prev.map(o => o.id === orderId ? { ...o, status } : o));
+    // 后台同步到 Supabase
+    try { await updateOrderDb(orderId, { status }); } catch (_) {}
   }, []);
 
   const getCustomerOrders = useCallback(() => orders, [orders]);
   const getMerchantOrders = useCallback(() => [...orders].sort((a, b) => b.createTime - a.createTime), [orders]);
 
-  // 菜品管理
+  // ====== 菜品管理 ======
   const updateDishStatus = useCallback(async (dishId: number, status: 'available' | 'soldout') => {
-    await updateDishApi(dishId, { status });
-    setDishes(prev => prev.map(d => d.id === dishId ? { ...d, status } : d));
+    await updateDishDb(dishId, { status });
   }, []);
 
   const addDish = useCallback(async (dish: Omit<Dish, 'id'>) => {
-    const newDish = await addDishApi(dish);
-    setDishes(prev => [...prev, newDish]);
+    await addDishDb(dish);
   }, []);
 
   const editDish = useCallback(async (dish: Dish) => {
-    await updateDishApi(dish.id, dish);
-    setDishes(prev => prev.map(d => d.id === dish.id ? dish : d));
+    const { id, name, description, price, image, categoryId: category_id, status } = dish;
+    await updateDishDb(id, { name, description, price, image, category_id, status });
   }, []);
 
   const deleteDish = useCallback(async (dishId: number) => {
-    await deleteDishApi(dishId);
-    setDishes(prev => prev.filter(d => d.id !== dishId));
+    await deleteDishDb(dishId);
   }, []);
 
-  // 统计
+  // ====== 今日统计 ======
   const getTodayStats = useCallback(() => {
     const today = new Date(); today.setHours(0, 0, 0, 0);
     const todayOrders = orders.filter(o => o.createTime >= today.getTime());

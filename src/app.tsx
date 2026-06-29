@@ -1,3 +1,6 @@
+// 微信小程序环境 polyfill：Headers / fetch
+import './polyfills';
+
 import React, { useEffect } from 'react';
 import { useDidShow, useDidHide } from '@tarojs/taro';
 import { AppProvider } from '@/store/context';
