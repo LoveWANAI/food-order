@@ -1,0 +1,36 @@
+// ============================================
+// 主题配色变量 - 餐饮点餐小程序
+// ============================================
+
+// 品牌主题色（活力橙，食欲感）
+$color-primary: #FF6B35;
+$color-primary-light: #FF8555;
+$color-primary-dark: #E55A28;
+
+// 功能色
+$color-success: #52C41A;
+$color-warning: #FF9500;
+$color-error: #FF4D4F;
+$color-info: #FF6B35;
+
+// 背景色
+$color-bg-page: #FFF9F5;
+$color-bg-card: #ffffff;
+$color-bg-hover: #FFF0EB;
+
+// 文本色
+$color-text-primary: #333333;
+$color-text-secondary: #666666;
+$color-text-tertiary: #999999;
+$color-text-disabled: #CCCCCC;
+$color-text-white: #ffffff;
+
+// 边框色
+$color-border: #EEEEEE;
+$color-divider: #F5F5F5;
+
+// 语义色（订单状态）
+$color-pending: #FF9500;   // 待处理
+$color-confirmed: #165DFF; // 已接单
+$color-completed: #52C41A; // 已完成
+$color-cancelled: #FF4D4F; // 已取消

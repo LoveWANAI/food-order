@@ -1,0 +1,172 @@
+@use '@/styles/variables.scss' as *;
+
+.card {
+  background: $color-bg-card;
+  border-radius: $radius-md;
+  box-shadow: $shadow-card;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: $spacing-sm;
+  border-bottom: 1rpx solid $color-divider;
+  margin-bottom: $spacing-sm;
+}
+
+.orderNo {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.status {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  padding: 4rpx 16rpx;
+  border-radius: $radius-xs;
+}
+
+.pending {
+  background: rgba(255, 149, 0, 0.1);
+  color: $color-pending;
+}
+
+.confirmed {
+  background: rgba(22, 93, 255, 0.1);
+  color: $color-confirmed;
+}
+
+.completed {
+  background: rgba(82, 196, 26, 0.1);
+  color: $color-completed;
+}
+
+.cancelled {
+  background: rgba(255, 77, 77, 0.1);
+  color: $color-cancelled;
+}
+
+.items {
+  margin-bottom: $spacing-sm;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  padding: $spacing-xs 0;
+}
+
+.itemName {
+  flex: 1;
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  @include text-ellipsis;
+}
+
+.itemQty {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  margin: 0 $spacing-md;
+  min-width: 60rpx;
+  text-align: center;
+}
+
+.itemPrice {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  min-width: 100rpx;
+  text-align: right;
+}
+
+.remark {
+  display: flex;
+  padding: $spacing-xs 0;
+  border-top: 1rpx dashed $color-border;
+  margin-top: $spacing-xs;
+}
+
+.remarkLabel {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.remarkText {
+  font-size: $font-size-sm;
+  color: $color-warning;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: $spacing-sm;
+  border-top: 1rpx solid $color-divider;
+}
+
+.time {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.total {
+  display: flex;
+  align-items: center;
+}
+
+.totalLabel {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.totalPrice {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  color: $color-primary;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: $spacing-sm;
+  margin-top: $spacing-md;
+  padding-top: $spacing-sm;
+  border-top: 1rpx solid $color-divider;
+}
+
+.btn {
+  @include button-reset;
+  font-size: $font-size-sm;
+  padding: 0 $spacing-lg;
+  height: 56rpx;
+  border-radius: $radius-button;
+  min-width: 140rpx;
+
+  &:active {
+    opacity: 0.9;
+    transform: scale(0.98);
+  }
+}
+
+.confirmBtn {
+  background: $color-primary;
+  color: #fff;
+}
+
+.cancelBtn {
+  background: #fff;
+  color: $color-error;
+  border: 1rpx solid $color-error;
+}
+
+.completeBtn {
+  background: $color-success;
+  color: #fff;
+}
+
+.reorderBtn {
+  background: $color-primary;
+  color: #fff;
+}
