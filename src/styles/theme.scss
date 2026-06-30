@@ -1,36 +1,36 @@
-// ============================================
-// 主题配色变量 - 小爱专属服务
+// ============================================ 
+// 主题配色变量 - 小爱专属服务（可爱少女粉）
 // ============================================
 
-// 品牌主题色（活力橙，食欲感）
-$color-primary: #FF6B35;
-$color-primary-light: #FF8555;
-$color-primary-dark: #E55A28;
+// 品牌主题色（甜美粉，少女心）
+$color-primary: #FF85A2;
+$color-primary-light: #FFB3C6;
+$color-primary-dark: #FF6B8A;
 
 // 功能色
 $color-success: #52C41A;
 $color-warning: #FF9500;
-$color-error: #FF4D4F;
-$color-info: #FF6B35;
+$color-error: #FF6B6B;
+$color-info: #FF85A2;
 
 // 背景色
-$color-bg-page: #FFF9F5;
+$color-bg-page: #FFF5F7;
 $color-bg-card: #ffffff;
-$color-bg-hover: #FFF0EB;
+$color-bg-hover: #FFE4E9;
 
 // 文本色
-$color-text-primary: #333333;
-$color-text-secondary: #666666;
-$color-text-tertiary: #999999;
-$color-text-disabled: #CCCCCC;
+$color-text-primary: #4A4A4A;
+$color-text-secondary: #7A7A7A;
+$color-text-tertiary: #AAAAAA;
+$color-text-disabled: #D5D5D5;
 $color-text-white: #ffffff;
 
 // 边框色
-$color-border: #EEEEEE;
-$color-divider: #F5F5F5;
+$color-border: #FFD4DE;
+$color-divider: #FFECF0;
 
 // 语义色（订单状态）
 $color-pending: #FF9500;   // 待处理
-$color-confirmed: #165DFF; // 已接单
+$color-confirmed: #FF85A2; // 已接单
 $color-completed: #52C41A; // 已完成
-$color-cancelled: #FF4D4F; // 已取消
+$color-cancelled: #FF6B6B; // 已取消

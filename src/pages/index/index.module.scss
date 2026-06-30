@@ -2,7 +2,7 @@
 
 .container {
   min-height: 100vh;
-  background: linear-gradient(180deg, $color-bg-page 0%, #fff 100%);
+  background: linear-gradient(180deg, #FFF0F5 0%, #FFE4EC 30%, #FFF5F7 100%);
   padding: $spacing-xl $page-padding;
   padding-top: 120rpx;
   display: flex;
@@ -13,13 +13,19 @@
 .logo {
   width: 180rpx;
   height: 180rpx;
-  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
-  border-radius: $radius-xl;
+  background: linear-gradient(135deg, #FFB3C6 0%, #FF85A2 50%, #FFD4DE 100%);
+  border-radius: 50%;
   margin-bottom: $spacing-lg;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: $shadow-card-hover;
+  box-shadow: 0 8rpx 32rpx rgba(255, 133, 162, 0.35);
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12rpx); }
 }
 
 .logoText {

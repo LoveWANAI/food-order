@@ -292,10 +292,17 @@ export default function MerchantDishPage() {
                   ) : (
                     <View className={styles.uploadPlaceholder}>
                       <Text className={styles.uploadIcon}>📷</Text>
-                      <Text className={styles.uploadText}>点击上传图片</Text>
+                      <Text className={styles.uploadText}>点击上传</Text>
                     </View>
                   )}
                 </View>
+                <Text className={styles.formHint}>或</Text>
+                <Input
+                  className={styles.formInput}
+                  placeholder='直接粘贴图片链接替换'
+                  value={formData.image}
+                  onInput={(e) => setFormData({ ...formData, image: e.detail.value })}
+                />
               </View>
 
               <View className={styles.formItem}>

@@ -25,8 +25,8 @@ export default function CustomerHomePage() {
     <View className={styles.container}>
       {/* 顶部标题 */}
       <View className={styles.header}>
-        <Text className={styles.title}>小爱专属菜单</Text>
-        <Text className={styles.subtitle}>用心准备，只为小爱</Text>
+        <Text className={styles.title}>小爱专属菜单 💖</Text>
+        <Text className={styles.subtitle}>想吃什么你就点，我都给你做</Text>
       </View>
 
       {/* 分类导航 */}

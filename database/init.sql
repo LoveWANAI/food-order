@@ -1,5 +1,5 @@
 -- ============================================
--- 点餐小程序 Supabase 数据库初始化脚本
+-- 小爱专属服务 Supabase 数据库初始化脚本
 -- 在 Supabase SQL Editor 中粘贴执行即可
 -- ============================================
 
@@ -31,21 +31,48 @@ CREATE TABLE IF NOT EXISTS orders (
 ALTER PUBLICATION supabase_realtime ADD TABLE dishes;
 ALTER PUBLICATION supabase_realtime ADD TABLE orders;
 
--- 4. 插入默认菜品
+-- 4. 插入默认菜品（小爱专属菜单）
 INSERT INTO dishes (name, description, price, image, category_id, status) VALUES
-('黄焖鸡米饭',   '鲜嫩鸡腿肉，搭配青椒香菇，汤汁浓郁', 22, 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=chinese+braised+chicken+clay+pot+rice&image_size=square', 1, 'available'),
-('红烧牛肉面',   '大块牛腩慢炖，汤头香浓', 25, 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=braised+beef+noodle+soup+chinese&image_size=square', 1, 'available'),
-('宫保鸡丁饭',   '鸡肉丁配花生米，麻辣鲜香', 20, 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=kung+pao+chicken+rice+chinese&image_size=square', 2, 'available'),
-('番茄炒蛋盖饭', '家常美味，酸甜可口', 16, 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=tomato+egg+rice+chinese&image_size=square', 2, 'available'),
-('凉拌黄瓜',     '清脆爽口，蒜香开胃', 8, 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=chinese+cucumber+salad&image_size=square', 3, 'available'),
-('皮蛋豆腐',     '嫩滑豆腐配皮蛋，清爽解暑', 10, 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=century+egg+tofu&image_size=square', 3, 'available'),
-('冰可乐',       '冰镇可乐，解渴必备', 5, 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=iced+coca+cola&image_size=square', 4, 'available'),
-('珍珠奶茶',     'Q弹珍珠配浓郁奶茶', 12, 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=bubble+milk+tea&image_size=square', 4, 'available'),
-('抹茶蛋糕',     '日式抹茶，绵密香甜', 15, 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=matcha+cake+slice&image_size=square', 5, 'available'),
-('芒果布丁',     '鲜芒果配嫩滑布丁', 12, 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=mango+pudding&image_size=square', 5, 'available');
+-- 热销套餐 (category_id=1)
+('搓一顿美蛙鱼【两斤蛙➕米饭】', '鲜嫩美蛙搭配秘制锅底，两斤蛙肉超满足', 48, 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=spicy+frog+hotpot+with+rice%2C+chinese+cuisine&image_size=square', 1, 'available'),
+('沙县小吃【鸡腿饭➕紫菜蛋花汤】', '经典沙县搭配，鸡腿饭配紫菜蛋花汤', 25, 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=chicken+leg+rice+seaweed+egg+soup+chinese&image_size=square', 1, 'available'),
+('沙县小吃【卤肉饭】', '卤香四溢，酱汁拌饭超下饭', 18, 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=braised+pork+rice+chinese+sha+county&image_size=square', 1, 'available'),
+('鲜味记【一荤两素➕米饭】', '营养均衡，一荤两素搭配白米饭', 22, 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=chinese+combo+meal+meat+vegetables+rice&image_size=square', 1, 'available'),
+('冒三巡【烤鸭冒菜】', '烤鸭遇上冒菜，麻辣鲜香新体验', 32, 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=roast+duck+maocai+spicy+hot+pot&image_size=square', 1, 'available'),
+-- 主食 (category_id=2)
+('番茄鸡蛋盖饭', '酸甜番茄配上嫩滑鸡蛋，家常温暖味道', 16, 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=tomato+egg+rice+chinese+home+cooking&image_size=square', 2, 'available'),
+('青椒肉丝炒饭', '经典青椒肉丝，粒粒分明香喷喷', 18, 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=green+pepper+pork+fried+rice+chinese&image_size=square', 2, 'available'),
+('火腿肠鸡蛋炒饭', '简单好吃，火腿鸡蛋炒饭永远的爱', 15, 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=ham+egg+fried+rice+simple+delicious&image_size=square', 2, 'available'),
+('猪脚饭', '软糯Q弹猪脚，满满胶原蛋白', 25, 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=braised+pig+trotter+rice+chinese&image_size=square', 2, 'available'),
+('鱼香肉丝盖饭', '酸甜微辣鱼香汁，拌饭一绝', 20, 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=yu+xiang+shredded+pork+rice+szechuan&image_size=square', 2, 'available'),
+-- 饮品 (category_id=3)
+('一点点【QQ莓莓奶茶不加糖】', 'Q弹莓莓配浓郁奶茶，不加糖也超好喝', 15, 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=strawberry+bubble+milk+tea+pink+cute+boba&image_size=square', 3, 'available'),
+('一点点【芭乐奶绿三分糖】', '清甜芭乐遇见奶绿，三分刚好', 15, 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=guava+green+milk+tea+refreshing+boba&image_size=square', 3, 'available'),
+('蜜雪冰城【芋圆葡萄三分糖】', '芋圆软糯，葡萄清甜，三分糖刚刚好', 8, 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=taro+ball+grape+drink+purple+cute&image_size=square', 3, 'available'),
+('蜜雪冰城【柠檬水正常糖】', '清爽柠檬水，解腻必备', 5, 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=fresh+lemonade+cold+refreshing+drink&image_size=square', 3, 'available'),
+('蜜雪冰城【茉莉奶绿三分糖】', '茉莉花香配上奶绿，清新脱俗', 8, 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=jasmine+green+milk+tea+floral+boba&image_size=square', 3, 'available'),
+('蜜雪冰城【布丁奶茶三分糖】', '丝滑布丁配上浓郁奶茶，甜蜜温柔', 8, 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=pudding+milk+tea+caramel+boba+drink&image_size=square', 3, 'available'),
+('沪上阿姨【仙仙玫瑰青提三分糖】', '玫瑰花香遇上青提，仙女必喝', 16, 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=rose+grape+tea+pink+aesthetic+floral&image_size=square', 3, 'available'),
+('沪上阿姨【厚芋泥啵啵奶茶三分糖】', '厚厚芋泥配上Q弹啵啵，幸福感爆棚', 18, 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=thick+taro+bubble+milk+tea+purple+sweet&image_size=square', 3, 'available'),
+('沪上阿姨【千目抹茶波波正常糖】', '浓郁抹茶遇上Q弹波波，日系甜感', 18, 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=matcha+boba+tea+green+bubble+japanese&image_size=square', 3, 'available'),
+('沪上阿姨【白玫瑰羽衣甘蓝三分糖】', '清新羽衣甘蓝配白玫瑰，高颜值养生茶', 18, 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=rose+kale+tea+pink+healthy+drink&image_size=square', 3, 'available'),
+('沪上阿姨【千目抹茶冰奶正常糖】', '浓郁抹茶冰奶，夏天的一抹清凉', 18, 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=matcha+iced+milk+green+refreshing+japanese&image_size=square', 3, 'available'),
+('古茗【超A芝士葡萄三分糖】', '芝士奶盖配葡萄，超A级好喝', 16, 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=cheese+grape+tea+cheese+foam+trendy+boba&image_size=square', 3, 'available'),
+-- 甜点 (category_id=4)
+('初味甜品【毛巾卷奥利奥/抹茶奥利奥】', '软糯毛巾卷，奥利奥与抹茶的双重诱惑', 22, 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=oreo+matcha+towel+roll+cake+cute+dessert&image_size=square', 4, 'available'),
+('小蛋糕', '精致小蛋糕，一口一个甜蜜', 15, 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=cute+mini+cake+pink+frosting+kawaii&image_size=square', 4, 'available'),
+('蛋挞', '酥脆外皮，嫩滑蛋心，经典甜品', 8, 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=egg+tart+portuguese+custard+golden&image_size=square', 4, 'available'),
+-- 情绪 (category_id=5)
+('【有点不开心】', '想要你的安慰和抱抱', 0, 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=cute+sad+cat+illustration+kawaii+pink+pastel&image_size=square', 5, 'available'),
+('【我想你了】', '就是很想你，没有理由', 0, 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=cute+love+heart+illustration+kawaii+pink+romantic&image_size=square', 5, 'available'),
+('【对不起，但我说不出口】', '用这个代替那三个字', 0, 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=cute+shy+bunny+illustration+sorry+kawaii+pastel&image_size=square', 5, 'available'),
+('【爱你超级加倍】', '爱你不止一点点，是超级加倍！', 0, 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=cute+love+super+heart+illustration+kawaii+pink&image_size=square', 5, 'available'),
+-- 互动 (category_id=6)
+('【申请打电话】', '想听你的声音了，现在就想！', 0, 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=cute+phone+call+illustration+kawaii+couple+pink&image_size=square', 6, 'available'),
+('【想玩游戏了】', '一起开黑，或者你看着我玩也行', 0, 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=cute+game+controller+illustration+kawaii+pink+pastel&image_size=square', 6, 'available');
 
 -- 5. 设置行级安全策略（RLS）
--- 允许所有人读写（因为你这是两个人的私用小程序）
+-- 允许所有人读写（因为这是两个人的私用小程序）
 ALTER TABLE dishes ENABLE ROW LEVEL SECURITY;
 ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
 

@@ -68,10 +68,10 @@ export default function IndexPage() {
   return (
     <View className={styles.container}>
       <View className={styles.logo}>
-        <Text className={styles.logoText}>🍜</Text>
+        <Text className={styles.logoText}>🐱</Text>
       </View>
       <Text className={styles.title}>小爱专属服务</Text>
-      <Text className={styles.subtitle}>贴心服务，只为小爱</Text>
+      <Text className={styles.subtitle}>专属小公主的点单神器 💕</Text>
 
       <View className={styles.loginBox}>
         <Text className={styles.loginTitle}>账号登录</Text>

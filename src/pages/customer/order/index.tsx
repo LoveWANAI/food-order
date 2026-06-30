@@ -32,7 +32,7 @@ export default function CustomerOrderPage() {
     <View className={styles.container}>
       {/* 顶部标题 */}
       <View className={styles.header}>
-        <Text className={styles.title}>小爱订单</Text>
+        <Text className={styles.title}>小爱订单 💌</Text>
       </View>
 
       {/* 标签页 */}
